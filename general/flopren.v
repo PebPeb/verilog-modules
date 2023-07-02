@@ -17,15 +17,15 @@ module flopr(d, q, clk, enable, reset);
 
 	input wire                enable, reset, clk;
 	input wire [WIDTH - 1:0]	d;
-  	output wire [WIDTH - 1:0]	q;
+  output wire [WIDTH - 1:0]	q;
 	
 	reg [WIDTH - 1:0]         q_n;
 	
 	initial q_n = INIT;
 	always @(posedge clk, posedge reset) begin
 		q_n <= reset ? {WIDTH{1'b0}} : (enable ? d : q_n);
-  	end
+  end
 
-  	assign q = q_n;
+  assign q = q_n;
 
 endmodule
