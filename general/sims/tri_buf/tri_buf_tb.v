@@ -1,31 +1,6 @@
 //
 //	tri_buf.v
 //		Adjustable data width Tri State Buffer
-//
-
-// -------------------------------- //
-//	By: Bryce Keen	
-//	Created: 06/30/2023
-// -------------------------------- //
-//	Last Modified: 06/30/2023
-
-
-
-module tri_buf(data_in, data_out, enable);
-	parameter WIDTH = 32;
-	
-	input wire [WIDTH - 1:0]	data_in;
-  input wire      			    enable;
-	inout wire [WIDTH - 1:0]	data_out;
-
-  assign data_out = enable ? data_in : {WIDTH{1'bZ}};
-
-endmodule
-
-
-//
-//	tri_buf.v
-//		Adjustable data width Tri State Buffer
 //    Testbench
 //
 
@@ -41,24 +16,30 @@ module tri_buf_tb();
 
   reg                   enable = 0;
 	reg [WIDTH - 1:0]     tri_data = 32'h00FF00FF;
-  wire [WIDTH - 1:0]    bus;
+  reg [WIDTH - 1:0]     bus_data = 32'hFF00FF00;
+
+  wire [WIDTH - 1:0]    bus, data_out;
 
 
 	tri_buf UUT(
     .data_in(tri_data),
-    .data_out(bus),
+    .data_out(data_out),
     .enable(enable)
 		);
 
+  assign bus = enable ? data_out : bus_data;
+
 	initial begin
-    
+    #10
+    enable <= 1;
+    #10
 
 		$finish;
 	end
 
   initial begin
-		$dumpfile("flopren_tb.vcd");
-		$dumpvars(0, flopren_tb);
+		$dumpfile("tri_buf_tb.vcd");
+		$dumpvars(0, tri_buf_tb);
 	end
 
 endmodule

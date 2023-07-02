@@ -4,12 +4,12 @@
 all: rebuild gtkwave
 
 rebuild:
-	iverilog -o flopren_tb.out flopren_tb.v ../../flopren.v
-	vvp flopren_tb.out
+	iverilog -o tri_buf_tb.out tri_buf_tb.v ../../tri_buf.v
+	vvp tri_buf_tb.out
 
 gtkwave:
-	gtkwave flopren_tb.vcd
+	gtkwave tri_buf_tb.vcd
 
 clean:
-	rm -f flopren_tb.out
-	rm -f flopren_tb.vcd
+	rm -f tri_buf_tb.out
+	rm -f tri_buf_tb.vcd
