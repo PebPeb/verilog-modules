@@ -4,7 +4,7 @@
 all: rebuild gtkwave
 
 rebuild:
-	iverilog -o flopren_tb.out flopren_tb.v ../../flopren.v
+	iverilog -o flopren_tb.out flopren_tb.v ../flopren.v
 	vvp flopren_tb.out
 
 gtkwave:

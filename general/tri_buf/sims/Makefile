@@ -4,7 +4,7 @@
 all: rebuild gtkwave
 
 rebuild:
-	iverilog -o tri_buf_tb.out tri_buf_tb.v ../../tri_buf.v
+	iverilog -o tri_buf_tb.out tri_buf_tb.v ../tri_buf.v
 	vvp tri_buf_tb.out
 
 gtkwave:
