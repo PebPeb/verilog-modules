@@ -7,7 +7,7 @@
 //	By: Bryce Keen	
 //	Created: 11/09/2023
 // -------------------------------- //
-//	Last Modified: 11/10/2023
+//	Last Modified: 11/14/2023
 
 
 module TMDS_encoder(clk, D, C0, C1, DE, q_out);
@@ -36,17 +36,17 @@ module TMDS_encoder(clk, D, C0, C1, DE, q_out);
 
   always @(*) begin
     if ((cnt == 0) || (q_m_N1 == q_m_N0)) begin
-      pixel_data = {~q_m[8], q_m[8], q_m[8] ? q_m[7:0] : ~q_m[7:0]};
-      cnt_n = q_m[8] ? cnt + q_m_N1 - q_m_N0 : cnt - q_m_N1 + q_m_N0;
+      pixel_data <= {~q_m[8], q_m[8], q_m[8] ? q_m[7:0] : ~q_m[7:0]};
+      cnt_n <= q_m[8] ? cnt + q_m_N1 - q_m_N0 : cnt - q_m_N1 + q_m_N0;
     end
     else begin
       if (((cnt > 0) && (q_m_N1 > q_m_N0)) || ((cnt < 0) && (q_m_N0 > q_m_N1))) begin
-        pixel_data = {1'b1, q_m[8], ~q_m[7:0]};
-        cnt_n = cnt + (q_m[8] ? 2 : 0) - q_m_N1 + q_m_N0;
+        pixel_data <= {1'b1, q_m[8], ~q_m[7:0]};
+        cnt_n <= cnt + (q_m[8] ? 2 : 0) - q_m_N1 + q_m_N0;
       end
       else begin
-        pixel_data = {1'b0, q_m[8], q_m[7:0]};
-        cnt_n = cnt - (~q_m[8] ? 2 : 0) + q_m_N1 - q_m_N0;
+        pixel_data <= {1'b0, q_m[8], q_m[7:0]};
+        cnt_n <= cnt - (~q_m[8] ? 2 : 0) + q_m_N1 - q_m_N0;
       end
     end
   
@@ -54,10 +54,10 @@ module TMDS_encoder(clk, D, C0, C1, DE, q_out);
 
   always @(*) begin
     case ({C0, C1})
-      2'b00:    control_data = 10'b1101010100;
-      2'b01:    control_data = 10'b0010101011;
-      2'b10:    control_data = 10'b0101010100;
-      2'b11:    control_data = 10'b1010101011;
+      2'b00:    control_data <= 10'b1101010100;
+      2'b01:    control_data <= 10'b0010101011;
+      2'b10:    control_data <= 10'b0101010100;
+      2'b11:    control_data <= 10'b1010101011;
     endcase
   end
 
