@@ -15,8 +15,10 @@ module uart_tx_tb();
 
 
   uart_tx #(
-    .INPUT_CLK(21),
-    .BAUD_RATE(4)
+    .INPUT_CLK(100_000_000),
+    .BAUD_RATE(115200),
+    .STOP_BITS(1),
+    .PARITY_BIT(0)
   ) DUT (
     .clk(clk), 
     .reset(reset), 
@@ -27,15 +29,15 @@ module uart_tx_tb();
   );
 
   initial begin
-    #100
-    data <= 8'b00110101;
+    #10000
+    data <= 8'b00111101;
     tx_start <= 1;
     #20
     tx_start <= 0;
     while (tx_busy) begin
       #10;
     end
-    #100
+    #10000
 
     data <= 8'b11000011;
     tx_start <= 1;
@@ -44,7 +46,7 @@ module uart_tx_tb();
     while (tx_busy) begin
       #10;
     end
-    #100
+    #10000
 
     data <= 8'b10101010;
     tx_start <= 1;
@@ -53,7 +55,7 @@ module uart_tx_tb();
     while (tx_busy) begin
       #10;
     end
-    #100
+    #10000
 
     data <= 8'b01010101;
     tx_start <= 1;
@@ -62,10 +64,10 @@ module uart_tx_tb();
     while (tx_busy) begin
       #10;
     end
-    #100
+    #10000
 
-    #100
-    #100
+    #10000
+    #10000
     $finish;
 	end
 

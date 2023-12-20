@@ -12,6 +12,7 @@ module uart_tx (clk, reset, tx_start, tx_data, tx_busy, tx);
   parameter     BAUD_RATE      = 115200;
   parameter     PAYLOAD_WIDTH  = 8;
   parameter     STOP_BITS      = 1;
+  parameter     PARITY_BIT     = 0;
 
   localparam    CYCLES_PER_BIT = (INPUT_CLK / BAUD_RATE) - 1;
 
@@ -19,8 +20,9 @@ module uart_tx (clk, reset, tx_start, tx_data, tx_busy, tx);
   localparam    IDLE_STATE     = 0;
   localparam    START_STATE    = 1;
   localparam    DATA_STATE     = 2;
-  localparam    STOP_STATE     = 3;
-  reg [1:0]                 state_reg = IDLE_STATE;
+  localparam    PARITY_STATE   = 3;
+  localparam    STOP_STATE     = 4;
+  reg [2:0]     state_reg      = IDLE_STATE;
 
   reg [3:0]                 bits_transmited = 0;
   reg [PAYLOAD_WIDTH - 1:0] data = 0;
@@ -61,16 +63,26 @@ module uart_tx (clk, reset, tx_start, tx_data, tx_busy, tx);
         end
 
         DATA_STATE: begin
-          tx <= data[0];
+          tx <= data[bits_transmited];
           if (counter == CYCLES_PER_BIT) begin
             counter <= 0;
             bits_transmited <= bits_transmited + 1;
             if (bits_transmited == (PAYLOAD_WIDTH - 1)) begin
-              state_reg <= STOP_STATE;
+              bits_transmited <= 0;
+              if (PARITY_BIT) begin
+                state_reg <= PARITY_STATE;
+              end else begin
+                state_reg <= STOP_STATE;
+              end
             end
-            else begin 
-              data <= {1'b0, data[7:1]};
-            end
+          end
+        end
+
+        PARITY_STATE: begin
+          tx <= data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5] ^ data[6] ^ data[7];
+          if (counter == CYCLES_PER_BIT) begin
+            state_reg <= STOP_STATE;
+            counter <= 0;
           end
         end
 
@@ -78,7 +90,11 @@ module uart_tx (clk, reset, tx_start, tx_data, tx_busy, tx);
           tx <= 1'b1;
           if (counter == CYCLES_PER_BIT) begin
             counter <= 0;
-            state_reg <= IDLE_STATE;
+            bits_transmited <= bits_transmited + 1;
+            if (bits_transmited == (STOP_BITS - 1)) begin
+              state_reg <= IDLE_STATE;
+              bits_transmited <= 0;
+            end
           end
         end
 
