@@ -15,12 +15,14 @@ module uart_tb();
   wire          tx, tx_busy, rx_busy, rx_valid;
 
   localparam PARITY_BIT = 1;
-
+  localparam STOP_BITS = 2;
+  localparam INPUT_CLK = 100_000_000;
+  localparam BAUD_RATE = 115200;
 
   uart_tx #(
-    .INPUT_CLK(100_000_000),
-    .BAUD_RATE(115200),
-    .STOP_BITS(1),
+    .INPUT_CLK(INPUT_CLK),
+    .BAUD_RATE(BAUD_RATE),
+    .STOP_BITS(STOP_BITS),
     .PARITY_BIT(PARITY_BIT)
   ) tx_DUT (
     .clk(clk), 
@@ -33,9 +35,9 @@ module uart_tb();
 
 
   uart_rx #(
-    .INPUT_CLK(100_000_000),
-    .BAUD_RATE(115200),
-    .STOP_BITS(1),
+    .INPUT_CLK(INPUT_CLK),
+    .BAUD_RATE(BAUD_RATE),
+    .STOP_BITS(STOP_BITS),
     .PARITY_BIT(PARITY_BIT)
   ) rx_DUT (
     .clk(clk), 
