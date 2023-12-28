@@ -1,0 +1,39 @@
+[dumpfile] "/home/developer/Documents/home_workspace/verilog-modules/protocols/UART/sims/uart_tb.vcd"
+*-22.868431 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+@22
+uart_tb.clk
+uart_tb.reset
+@200
+-
+@800200
+-States
+@22
+@2028
+^1 /home/developer/Documents/home_workspace/verilog-modules/protocols/UART/sims/filters/uart_state.filter
++{RX State} uart_tb.rx_DUT.state_reg[2:0]
+@2028
+^1 /home/developer/Documents/home_workspace/verilog-modules/protocols/UART/sims/filters/uart_state.filter
++{TX State} uart_tb.tx_DUT.state_reg[2:0]
+@1000200
+-States
+@200
+-UART TX
+@800200
+-TX
+@22
++{TX Data} uart_tb.data[7:0]
++{TX Serial} uart_tb.tx
++{TX Busy} uart_tb.tx_busy
++{TX Trigger} uart_tb.tx_start
+@1000200
+-TX
+@200
+-UART RX
+@800200
+-RX
+@22
++{RX Data} uart_tb.rx_data[7:0]
++{RX Busy} uart_tb.rx_busy
++{RX Valid} uart_tb.rx_valid
+@1000200
+-RX
