@@ -1,0 +1,33 @@
+[*]
+[*] GTKWave Analyzer v3.3.108 (w)1999-2020 BSI
+[*] Fri May 31 19:46:47 2024
+[*]
+[dumpfile] "C:\Users\The Pigeon Lord 9000\Desktop\verilog-modules\protocols\XINTF\sims\uart_xintf_tb.vcd"
+[dumpfile_mtime] "Fri May 31 19:43:08 2024"
+[dumpfile_size] 11694
+[savefile] "C:\Users\The Pigeon Lord 9000\Desktop\verilog-modules\protocols\XINTF\sims\uart_xint_tb.gtkw"
+[timestart] 0
+[size] 3840 2063
+[pos] -1 -1
+*-17.986616 653000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] uart_xintf_tb.
+[sst_width] 318
+[signals_width] 462
+[sst_expanded] 1
+[sst_vpaned_height] 662
+@22
+uart_xintf_tb.DUT.rx_data_in[7:0]
+uart_xintf_tb.DUT.rx_state[7:0]
+uart_xintf_tb.DUT.xintf_state[3:0]
+uart_xintf_tb.DUT.xa[15:0]
+uart_xintf_tb.DUT.xd[15:0]
+@28
+uart_xintf_tb.DUT.xrdn
+uart_xintf_tb.DUT.xwen
+uart_xintf_tb.DUT.zone_6_n
+uart_xintf_tb.DUT.zone_7_n
+uart_xintf_tb.DUT.write_trigger
+@29
+uart_xintf_tb.DUT.read_trigger
+[pattern_trace] 1
+[pattern_trace] 0
