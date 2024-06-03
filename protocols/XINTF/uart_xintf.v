@@ -10,20 +10,26 @@ module uart_xintf (
   xwen,
   xrdn,
   zone_6_n,
-  zone_7_n
+  zone_7_n,
+  tx_data_out,
+  tx_busy,
+  tx_start
 );
 
 input wire clk;
 input wire reset;
 input wire rx_valid;
 input wire xready;
+input wire tx_busy;
 input wire [7:0] rx_data_in;
 
+output reg tx_start = 0;
 output reg xwen = 1;
 output reg xrdn = 1;
 output reg zone_6_n = 1;
 output reg zone_7_n = 1;
 inout wire [15:0] xd;
+output reg [7:0] tx_data_out = 0;
 output reg [15:0] xa = 16'h0000; 
 
 reg [7:0] rx_data = 0;
@@ -41,7 +47,7 @@ reg [7:0] rx_state = IDLE;
 reg rd_wr_op;       // 0 for read 1 for write
 
 reg [31:0] address = 0;
-reg [15:0] data = 0, data_1 = 0, data_tx = 0;
+reg [15:0] data = 0, data_1 = 0, data_tx = 0, data_tx_1 = 0;
 
 reg write_trigger = 0;
 reg read_trigger = 0;
@@ -114,6 +120,10 @@ localparam	ST_7 = 4'h7;
 localparam	ST_8 = 4'h8;
 localparam	ST_9 = 4'h9;
 
+localparam NONE = 0;
+localparam READ_STATE = 1;
+localparam WRITE_STATE = 2;
+reg [1:0] rd_wr_xintf_state = NONE;
 
 reg [3:0] xintf_state = IDLE;
 reg xd_high_impd = 1;
@@ -130,6 +140,7 @@ always @(posedge clk, posedge reset) begin
     xd_high_impd <= 1;
     xwen <= 1;
     xrdn <= 1;
+    rd_wr_xintf_state <= NONE;
   end
   else begin
     case (xintf_state)
@@ -159,31 +170,43 @@ always @(posedge clk, posedge reset) begin
           xwen <= 0;
           xd_high_impd <= 0;
           data_1 <= data;
+          rd_wr_xintf_state <= WRITE_STATE;
         end
         else if (read_trigger) begin
           xd_high_impd <= 1;
           read_trigger <= 0;
           xrdn <= 0;
+          rd_wr_xintf_state <= READ_STATE;
         end
       end
       ST_3: begin
-        read_xintf(data_tx); 
+        if (rd_wr_xintf_state == READ_STATE) begin
+          read_xintf(data_tx); 
+        end
         xintf_state <= ST_4;
       end
       ST_4: begin
-        read_xintf(data_tx); 
+        if (rd_wr_xintf_state == READ_STATE) begin
+          read_xintf(data_tx); 
+        end
         xintf_state <= ST_5;
       end
       ST_5: begin
-        read_xintf(data_tx); 
+        if (rd_wr_xintf_state == READ_STATE) begin
+          read_xintf(data_tx); 
+        end
         xintf_state <= ST_6;
       end
       ST_6: begin
-        read_xintf(data_tx); 
+        if (rd_wr_xintf_state == READ_STATE) begin
+          read_xintf(data_tx); 
+        end 
         xintf_state <= ST_7;
       end
       ST_7: begin
-        read_xintf(data_tx); 
+        if (rd_wr_xintf_state == READ_STATE) begin
+          read_xintf(data_tx); 
+        end
         xwen <= 1;
         xrdn <= 1;
         xintf_state <= ST_8;
@@ -196,10 +219,16 @@ always @(posedge clk, posedge reset) begin
         zone_6_n <= 1;
         zone_7_n <= 1;
         xintf_state <= IDLE;
+
+        // Start TX state machine
+        if (rd_wr_xintf_state == READ_STATE) begin
+          data_tx_1 <= data_tx;
+          tx_start_state <= 1;
+        end 
+        rd_wr_xintf_state <= NONE;
       end
     endcase
   end
-
 end
 
 task read_xintf;
@@ -211,6 +240,68 @@ task read_xintf;
   end
 endtask
 
+localparam TX_LOWER = 1;
+localparam TX_UPPER = 2;
+localparam TX_WAIT_0 = 3;
+localparam TX_WAIT_1 = 4;
+
+reg tx_start_state = 0;
+reg [3:0] tx_state = IDLE;
+
+integer i = 0;
+always @(posedge clk, posedge reset) begin
+  if (reset) begin
+    tx_state <= IDLE;
+    tx_start_state <= 0;
+  end
+  else begin
+    case (tx_state)
+      IDLE: begin
+        if (tx_start_state && ~tx_busy) begin
+          tx_data_out <= data_tx_1[7:0];
+          tx_start <= 1;
+          tx_state <= TX_WAIT_0;
+          tx_start_state <= 0;
+        end
+        else begin
+          tx_state <= IDLE;
+        end
+      end 
+      TX_WAIT_0: begin
+        if (i >= 10) begin
+          tx_state <= TX_UPPER;
+          i <= 0;
+          tx_start <= 0;
+        end
+        else begin
+          i <= i + 1;
+          tx_state <= TX_WAIT_0;
+        end 
+      end
+      TX_UPPER: begin
+        if (~tx_busy) begin
+          tx_data_out <= data_tx_1[15:8];
+          tx_start <= 1;
+          tx_state <= TX_WAIT_1;
+        end
+        else begin
+          tx_state <= TX_UPPER;
+        end
+      end 
+      TX_WAIT_1: begin
+        if (i >= 10) begin
+          tx_state <= IDLE;
+          i <= 0;
+          tx_start <= 0;
+        end
+        else begin
+          i <= i + 1;
+          tx_state <= TX_WAIT_1;
+        end 
+      end
+    endcase
+  end
+end
 
 endmodule
 

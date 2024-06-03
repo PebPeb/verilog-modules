@@ -10,8 +10,11 @@ module uart_xintf_tb();
 
   reg [7:0]     rx_data_in = 0;
   reg           rx_valid = 0;
+  reg           tx_busy = 0;
 
   wire [15:0]   xa, xd;
+  wire [7:0]    tx_data_out;
+  wire          tx_start;
   wire          xwen, xrdn;
   wire          zone_6_n, zone_7_n;
 
@@ -25,7 +28,10 @@ module uart_xintf_tb();
     .xwen(xwen),
     .xrdn(xrdn),
     .zone_6_n(zone_6_n),
-    .zone_7_n(zone_7_n)
+    .zone_7_n(zone_7_n),
+    .tx_data_out(tx_data_out),
+    .tx_busy(tx_busy),
+    .tx_start(tx_start)
   );
 
   initial begin
@@ -48,7 +54,7 @@ module uart_xintf_tb();
     serial_write_byte2(8'h00);
     serial_write_byte2(8'h10);
     serial_write_byte2(8'h00);
-
+    force DUT.data_tx_1 = 16'hBEEF;
     #1000
     $finish;
 	end
