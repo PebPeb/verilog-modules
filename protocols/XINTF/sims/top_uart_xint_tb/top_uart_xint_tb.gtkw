@@ -1,0 +1,50 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Mon Jun  3 22:08:49 2024
+[*]
+[dumpfile] "/home/pigeonlord9000/Documents/verilog-modules/protocols/XINTF/sims/top_uart_xint_tb/top_uart_xintf_tb.vcd"
+[dumpfile_mtime] "Mon Jun  3 22:05:16 2024"
+[dumpfile_size] 93767
+[savefile] "/home/pigeonlord9000/Documents/verilog-modules/protocols/XINTF/sims/top_uart_xint_tb/top_uart_xint_tb.gtkw"
+[timestart] 0
+[size] 1366 704
+[pos] -1 -1
+*-23.445129 7285000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top_uart_xintf_tb.
+[treeopen] top_uart_xintf_tb.DUT.
+[sst_width] 233
+[signals_width] 224
+[sst_expanded] 1
+[sst_vpaned_height] 180
+@200
+-RX
+@28
+top_uart_xintf_tb.RX
+@22
+top_uart_xintf_tb.DUT.xintf_translate.rx_data_in[7:0]
+@28
+top_uart_xintf_tb.DUT.xintf_translate.rx_valid
+@200
+-TX
+@28
+top_uart_xintf_tb.TX
+top_uart_xintf_tb.DUT.tx_module.tx_busy
+@22
+top_uart_xintf_tb.DUT.tx_module.tx_data[7:0]
+@28
+top_uart_xintf_tb.DUT.tx_module.tx_start
+@22
+top_uart_xintf_tb.DUT.tx_module.bits_transmited[3:0]
+@28
+top_uart_xintf_tb.clk
+top_uart_xintf_tb.tb_tx.tx
+top_uart_xintf_tb.TX_testbench
+@29
+top_uart_xintf_tb.DUT.RX
+@200
+-XINTF
+@22
+top_uart_xintf_tb.xa[15:0]
+top_uart_xintf_tb.xd[15:0]
+[pattern_trace] 1
+[pattern_trace] 0
