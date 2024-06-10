@@ -74,6 +74,8 @@ always @(posedge rx_valid, posedge reset) begin
           rx_state <= ADRS_0;
           rd_wr_op <= 0;
         end
+        read_trigger <= 0;
+        write_trigger <= 0;
       end
       ADRS_0: begin
         address[7:0] <= rx_data;
@@ -130,7 +132,21 @@ reg xd_high_impd = 1;
 
 assign xd = xd_high_impd ? 16'hzzzz : data_1;
 
+reg read_trigger_rise = 0;
+reg read_trigger_1 = 0;
+reg [1:3] resync_read_trigger = 0;
+
+reg write_trigger_rise = 0;
+reg write_trigger_1 = 0;
+reg [1:3] resync_write_trigger = 0;
+
 always @(posedge clk, posedge reset) begin
+  read_trigger_rise <= resync_read_trigger[2] & !resync_read_trigger[3];
+  resync_read_trigger <= {read_trigger, resync_read_trigger[1:2]};
+
+  write_trigger_rise <= resync_write_trigger[2] & !resync_write_trigger[3];
+  resync_write_trigger <= {write_trigger, resync_write_trigger[1:2]};
+
   if (reset) begin
     xintf_state <= IDLE;
     zone_6_n <= 1;
@@ -141,11 +157,15 @@ always @(posedge clk, posedge reset) begin
     xwen <= 1;
     xrdn <= 1;
     rd_wr_xintf_state <= NONE;
+    read_trigger_1 <= 0;
+    write_trigger_1 <= 0;
   end
   else begin
     case (xintf_state)
       IDLE: begin
-        if (write_trigger || read_trigger) begin
+        if (write_trigger_rise || read_trigger_rise) begin
+          read_trigger_1 <= read_trigger_rise;
+          write_trigger_1 <= write_trigger_rise;
           xintf_state <= ST_1;
           xa <= address[15:0];
           xd_high_impd <= 1;
@@ -165,16 +185,16 @@ always @(posedge clk, posedge reset) begin
       end
       ST_2: begin
         xintf_state <= ST_3;
-        if (write_trigger) begin
-          write_trigger <= 0;
+        if (write_trigger_1) begin
+          write_trigger_1 <= 0;
           xwen <= 0;
           xd_high_impd <= 0;
           data_1 <= data;
           rd_wr_xintf_state <= WRITE_STATE;
         end
-        else if (read_trigger) begin
+        else if (read_trigger_1) begin
           xd_high_impd <= 1;
-          read_trigger <= 0;
+          read_trigger_1 <= 0;
           xrdn <= 0;
           rd_wr_xintf_state <= READ_STATE;
         end
