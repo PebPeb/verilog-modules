@@ -21,7 +21,6 @@ module TMDS_encoder(clk, D, C0, C1, DE, q_out);
   reg signed [4:0]          cnt = 0, cnt_n = 0;
 
   wire [3:0]         N1D;                        // Number of 1s
-  wire [3:0]         cnt_bal;                   // Balancing 1s and 0x
   wire [3:0]         q_m_N1, q_m_N0;
   wire               XNOR;                      // If it is not XNOR then it was XOR
   wire [8:0]         q_m;
