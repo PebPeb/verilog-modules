@@ -14,15 +14,15 @@ module fifo(
   
   input wire                          clk, reset;
   input wire                          wr, rd;
-  input wire [DATA_WIDTH - 1:0]       wr_data;
+  input wire [DATA_WIDTH - 1:0]       wr_data;                          
   output reg [DATA_WIDTH - 1:0]       rd_data;
   output wire                         empty, full;
 
   reg [DATA_WIDTH - 1:0] mem [DEPTH - 1:0]; 
 
-  reg [POINTERSIZE - 1:0]                 wr_ptr = 0;
-  reg [POINTERSIZE - 1:0]                 rd_ptr = 0;
-  reg [POINTERSIZE:0]                     stored = 0;
+  reg [POINTERSIZE - 1:0]                 wr_ptr = 0;                   // Write Index Pointer
+  reg [POINTERSIZE - 1:0]                 rd_ptr = 0;                   // Read Index Pointer
+  reg [POINTERSIZE:0]                     stored = 0;                   // How much memory is used
 
   assign full = (stored == DEPTH);
   assign empty = (wr_ptr == rd_ptr) & (!full);
@@ -35,16 +35,18 @@ module fifo(
       stored <= 0;
     end
     else begin
+      // Write to FIFO memory
       if (wr & !full) begin
         mem[wr_ptr] <= wr_data;
         wr_ptr <= wr_ptr + 1;
       end
-
+      // Read from FIFO memory
       if (rd & !empty) begin
         rd_data <= mem[rd_ptr];
         rd_ptr <= rd_ptr + 1;
       end
 
+      // Tracking memory used
       if(wr & rd) begin
         stored <= stored;
       end
