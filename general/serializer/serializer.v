@@ -4,6 +4,7 @@
 
 module serializer (clk, reset, I, O);
   parameter WIDTH = 32;
+  localparam LOG_WIDTH = $clog2(WIDTH);
 
   input wire                        clk, reset;
   input wire [WIDTH - 1:0]          I;
@@ -11,8 +12,8 @@ module serializer (clk, reset, I, O);
 
   reg                               I_shift_load = 0;
   reg [WIDTH - 1:0]                 I_shift = 0;
-
-  integer mod = 0;
+  reg [LOG_WIDTH - 1:0]             mod = 0;
+  
   always @(posedge clk, posedge reset) begin
     I_shift_load <= (mod == (WIDTH - 1));
     if (reset) begin
