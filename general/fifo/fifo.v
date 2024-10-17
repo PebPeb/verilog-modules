@@ -1,4 +1,16 @@
-// For simplicity sakes only depths of powers of 2
+//
+//	fifo.v
+//		Generic configurable fifo
+//    DATA_WIDTH
+//    DEPTH - Depth must be a power of 2    
+//
+
+// -------------------------------- //
+//	By: Bryce Keen	
+//	Created: 10/16/2024
+// -------------------------------- //
+//	Last Modified: 10/17/2024
+
 
 module fifo(
   clk, reset,
