@@ -15,31 +15,41 @@ include $(1)
 endef
 
 # Build Process for compiling testbenches
+# ---- #
 define gen_build_target
 BUILD_DIR_$(BUILD_NAME) := $(1)
 
 ifneq ($(TB_SOURCE),)
-.PHONY: build-$(BUILD_NAME)
-build-$(BUILD_NAME):
-	cd $$(BUILD_DIR_$(BUILD_NAME)) && \
-	iverilog -o $(BUILD_NAME).out -DVCD_DUMP=1 $(TB_SOURCE) $(TB_INCLUDE) && \
-	vvp $(BUILD_NAME).out
+$(foreach x, $(TB_SOURCE), \
+	$(eval $(call icarus_verilog, $(x), $$(BUILD_DIR_$(BUILD_NAME)))) \
+)
 endif
 endef
+
+define icarus_verilog
+ifeq ($(suffix $(1)),.v)
+.PHONY: build-iv-$(BUILD_NAME)_$(basename $(notdir $(1)))
+build-iv-$(BUILD_NAME)_$(basename $(notdir $(1))):
+	cd $(2) && \
+	iverilog -o $(basename $(notdir $(1))).out -DVCD_DUMP=1 $(1) $(TB_INCLUDE) && \
+	vvp $(basename $(notdir $(1))).out
+endif
+endef
+# ---- #
 
 # Simulating with GTKwave
 define gtkwave_sim_target 
 BUILD_DIR_$(BUILD_NAME) := $(1)
 
-ifneq ($(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))*.vcd)),)
+ifneq ($(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))/*.vcd)),)
 .PHONY: gtk-$(BUILD_NAME)-vcd
 gtk-$(BUILD_NAME)-vcd:
-	gtkwave $(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))*.vcd))
+	gtkwave $(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))/*.vcd))
 
-ifneq ($(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))*.gtkw)),)
-.PHONY: gtk-$(BUILD_NAME)-$(notdir $(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))*.gtkw)))
-gtk-$(BUILD_NAME)-$(notdir $(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))*.gtkw))):
-	gtkwave $(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))*.gtkw))
+ifneq ($(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))/*.gtkw)),)
+.PHONY: gtk-$(BUILD_NAME)-$(notdir $(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))/*.gtkw)))
+gtk-$(BUILD_NAME)-$(notdir $(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))/*.gtkw))):
+	gtkwave $(strip $(wildcard $(BUILD_DIR_$(BUILD_NAME))/*.gtkw))
 endif
 
 endif
