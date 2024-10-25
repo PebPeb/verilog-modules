@@ -3,3 +3,4 @@
 *.vcd
 
 *.filter
+obj_dir/
