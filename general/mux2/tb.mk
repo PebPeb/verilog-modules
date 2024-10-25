@@ -1,0 +1,8 @@
+# Testbench Makefile
+
+BUILD_NAME = mux2
+
+RELATIVE_PROJECT_PATH = general/mux2
+
+TB_SOURCE = 
+TB_INCLUDE = $(PROJECT_ROOT)/$(RELATIVE_PROJECT_PATH)/*.v
