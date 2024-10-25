@@ -4,11 +4,12 @@
 SIMS_FOLDERS := $(shell find $(PROJECT_ROOT) -type d -print)/
 
 # Checks for tb.mk
+# For every folder check for tb.mk if found add to VALID_SIMS_FOLDERS
 VALID_SIMS_FOLDERS :=
 $(foreach folder,$(SIMS_FOLDERS),$(if $(wildcard $(folder)/tb.mk),$(eval VALID_SIMS_FOLDERS += $(folder))))
 
 # ------------------------------------------------------------ #
-# Source mk files
+# Source all tb.mk files
 define sourcing_mk 
 include $(1)
 endef
@@ -17,11 +18,13 @@ endef
 define gen_build_target
 BUILD_DIR_$(BUILD_NAME) := $(1)
 
+ifneq ($(TB_SOURCE),)
 .PHONY: build-$(BUILD_NAME)
 build-$(BUILD_NAME):
 	cd $$(BUILD_DIR_$(BUILD_NAME)) && \
 	iverilog -o $(BUILD_NAME).out -DVCD_DUMP=1 $(TB_SOURCE) $(TB_INCLUDE) && \
 	vvp $(BUILD_NAME).out
+endif
 endef
 
 # Simulating with GTKwave
