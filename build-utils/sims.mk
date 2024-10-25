@@ -1,4 +1,4 @@
-include $(PROJECT_ROOT)/build-utils/iv.mk
+include $(PROJECT_ROOT)/build-utils/build.mk
 include $(PROJECT_ROOT)/build-utils/gtkwave.mk
 
 # Get all dirs in 
@@ -9,7 +9,6 @@ SIMS_FOLDERS := $(shell find $(PROJECT_ROOT) -type d -print)/
 # For every folder check for tb.mk if found add to VALID_SIMS_FOLDERS
 VALID_SIMS_FOLDERS :=
 $(foreach folder,$(SIMS_FOLDERS),$(if $(wildcard $(folder)/tb.mk),$(eval VALID_SIMS_FOLDERS += $(folder))))
-
 
 # ------------------------------------------------------------ #
 # Source all tb.mk files
@@ -22,7 +21,7 @@ endef
 # Make Process
 $(foreach x, $(VALID_SIMS_FOLDERS), \
 	$(eval $(call sourcing_mk, $(x)/tb.mk)) \
-	$(eval $(call gen_build_target, $(x), $(TB_SOURCE))) \
+	$(eval $(call gen_build, $(x))) \
 	$(eval $(call gtkwave_sim_target, $(x))) \
 )
 
