@@ -4,3 +4,4 @@
 
 *.filter
 obj_dir/
+tmp/
