@@ -5,3 +5,5 @@
 *.filter
 obj_dir/
 tmp/
+
+.vscode/

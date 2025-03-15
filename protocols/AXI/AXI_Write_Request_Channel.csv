@@ -1,0 +1,39 @@
+Name,Width,Source,Description
+AWVALID,1,Master,Valid indicator
+AWREADY,1,Slave,Ready indicator
+AWID,ID_W_WIDTH,Master,Transaction identifier for the write channels
+AWADDR,ADDR_WIDTH,Master,Transaction address
+AWREGION,4,Master,Region identifier
+AWLEN,8,Master,Transaction length
+AWSIZE,3,Master,Transaction size
+AWBURST,2,Master,Burst attribute
+AWLOCK,1,Master,Exclusive access indicator
+AWCACHE,4,Master,Memory attributes
+AWPROT,3,Master,Access attributes
+AWNSE,1,Master,Non-secure extension bit for RME
+AWQOS,4,Master,QoS identifier
+AWUSER,USER_REQ_WIDTH,Master,User-defined extension to a request
+AWDOMAIN,2,Master,Shareability domain of a request
+AWSNOOP,AWSNOOP_WIDTH,Master,Write request opcode
+AWSTASHNID,11,Master,Stash Node ID
+AWSTASHNIDEN,1,Master,Stash Node ID enable
+AWSTASHLPID,5,Master,Stash Logical Processor ID
+AWSTASHLPIDEN,1,Master,Stash Logical Processor ID enable
+AWTRACE,1,Master,Trace signal
+AWLOOP,LOOP_W_WIDTH,Master,Loopback signals on the write channels
+AWMMUVALID,1,Master,MMU signal qualifier
+AWMMUSECSID,SECSID_WIDTH,Master,Secure Stream ID
+AWMMUSID,SID_WIDTH,Master,StreamID
+AWMMUSSIDV,1,Master,SubstreamID valid
+AWMMUSSID,SSID_WIDTH,Master,SubstreamID
+AWMMUATST,1,Master,Address translated indicator
+AWMMUFLOW,2,Master,SMMU flow type
+AWPBHA,4,Master,Page-based Hardware Attributes
+AWNSAID,4,Master,Non-secure Access ID
+AWSUBSYSID,SUBSYSID_WIDTH,Master,Subsystem ID
+AWATOP,6,Master,Atomic transaction opcode
+AWMPAM,MPAM_WIDTH,Master,MPAM information with a request
+AWIDUNQ,1,Master,Unique ID indicator
+AWCMO,AWCMO_WIDTH,Master,CMO type
+AWTAGOP,2,Master,Memory Tag operation for write requests
+AWMECID,MECID_WIDTH,Master,Memory Encryption Context identifier
