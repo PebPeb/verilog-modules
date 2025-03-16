@@ -1,10 +1,13 @@
 
+# AMBA AXI
+
+AMBA in AMBA AXI stands for Advanced Microcontroller Bus Architecture. It is a set of interconnect specifications developed by ARM for communication between various components in a System-on-Chip (SoC).
+
+# Write
 
 VALID and READY signals
 
 Master uses **VALID** to tell the Slave information is available on the channel. The Slave uses the **READY** signal to show when it can accept the information.
-
-# Write
 
 ## Write Data Channel
 
