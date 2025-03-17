@@ -1,9 +1,13 @@
 
-*.out
-*.vcd
 
 *.filter
 obj_dir/
 tmp/
 
 .vscode/
+
+# Working Files
+
+*.out
+*.vcd
+*.~lock*

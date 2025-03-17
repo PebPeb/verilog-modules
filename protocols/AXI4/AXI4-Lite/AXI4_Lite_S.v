@@ -1,6 +1,6 @@
 
 
-module SLAVE_AXI (
+module AXI4_Lite_S (
     input ACLK,
     input ARESETn,
 
@@ -8,6 +8,15 @@ module SLAVE_AXI (
   );
   
   parameter DATA_WIDTH = 32;
+
+  // Parameter Check
+  initial begin
+    if (DATA_WIDTH != 32 && DATA_WIDTH != 64) begin
+      $display("Error: WIDTH must be either 32 or 64.");
+      $stop;
+    end
+  end
+
 
   wire ACLK;
   wire ARESETn;
