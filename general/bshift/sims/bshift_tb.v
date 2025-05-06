@@ -6,14 +6,22 @@ module bshift_tb;
 
   reg [WIDTH-1:0] data_in = 0;
   reg [$clog2(WIDTH)-1:0] shift_amt = 0;
-  wire [WIDTH-1:0] data_out;
+  wire [WIDTH-1:0] l_data_out, r_data_out;
 
   lbshift #(
     .WIDTH(WIDTH)
-  ) DUT (
+  ) DUT_L (
     .data_in(data_in),
     .shift_amt(shift_amt),
-    .data_out(data_out)
+    .data_out(l_data_out)
+  );
+
+  rbshift #(
+    .WIDTH(WIDTH)
+  ) DUT_R (
+    .data_in(data_in),
+    .shift_amt(shift_amt),
+    .data_out(r_data_out)
   );
 
   integer i;
